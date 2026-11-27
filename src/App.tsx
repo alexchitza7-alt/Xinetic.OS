@@ -1,14 +1,11 @@
-
 import { useEffect, useState } from 'react'
 import {
   Monitor, Folder, Settings, Terminal, Calculator, FileText,
-  Search, Wifi, Battery, Volume2, Power, Bell, Calendar,
+  Search, Wifi, Battery, Volume2, Bell,
   X, Minus, Maximize2, Grid3X3, Sparkles, ChevronRight,
-  Home, Plus, Trash2, Save, Palette, HardDrive, Pencil,
-  FilePlus, FolderPlus, Moon, Sun, RotateCcw, Check,
-  Clock, Download, Image, Music, File, Menu, Grip
+  Home, Trash2, Save, Palette, HardDrive, Pencil,
+  FolderPlus, FilePlus, Moon, Sun, Check, Clock, Grip
 } from 'lucide-react'
-
 type AppId = 'files' | 'settings' | 'terminal' | 'calculator' | 'notes' | 'monitor'
 
 type WindowData = {
