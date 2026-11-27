@@ -1,13 +1,11 @@
-
 import { useEffect, useState } from 'react'
 import {
   Monitor, Folder, Settings, Terminal, Calculator, FileText,
   Wifi, Battery, Volume2, Bell, X, Minus, Maximize2,
   Grid3X3, Trash2, Save, Pencil, FolderPlus, FilePlus,
   Moon, Sun, Check, Store, Globe, Calendar, Music,
-  Image, Gamepad2, Download, Play, Plus, Search
+  Image, Gamepad2, Download, Play, Search
 } from 'lucide-react'
-
 type AppId =
   | 'files' | 'settings' | 'terminal' | 'calculator' | 'notes'
   | 'monitor' | 'store' | 'browser' | 'calendar' | 'music'
