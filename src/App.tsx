@@ -306,9 +306,6 @@ export default function App() {
   const [terminalCommand, setTerminalCommand] = useState('')
   const [calcValue, setCalcValue] = useState('')
   const [browserUrl, setBrowserUrl] = useState('https://www.google.com')
-  const [gameNumber, setGameNumber] = useState(() => Math.floor(Math.random() * 10) + 1)
-  const [gameGuess, setGameGuess] = useState('')
-  const [gameMessage, setGameMessage] = useState('Guess a number from 1 to 10!')
   const [audioUrl, setAudioUrl] = useState('')
   const [photoUrl, setPhotoUrl] = useState('')
 
