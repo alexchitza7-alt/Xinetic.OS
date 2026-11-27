@@ -3,7 +3,7 @@ import {
   Monitor, Folder, Settings, Terminal, Calculator,
   FileText, Search, Wifi, Battery, Volume2,
   Power, Bell, Calendar, X, Minus, Maximize2,
-  Grid3X3, Sparkles, Clock, ChevronRight
+  Grid3X3, Sparkles, ChevronRight
 } from 'lucide-react'
 
 type AppWindow = {
