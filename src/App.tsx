@@ -1,15 +1,12 @@
-
 import { useEffect, useState } from 'react'
-import type { ComponentType } from 'react'
 import {
   Monitor, Folder, Settings, Terminal, Calculator, FileText,
   Wifi, Battery, Volume2, Bell, X, Minus, Maximize2,
   Grid3X3, Trash2, Save, Pencil, FolderPlus, FilePlus,
   Moon, Sun, Check, Store, Globe, Calendar, Music,
-  Image, Gamepad2, Download, Play, Search, Home,
-  ChevronRight, Palette, HardDrive
+  Image, Gamepad2, Download, Home, ChevronRight,
+  Palette, HardDrive
 } from 'lucide-react'
-
 type AppId =
   | 'files' | 'settings' | 'terminal' | 'calculator' | 'notes'
   | 'monitor' | 'store' | 'browser' | 'calendar' | 'music'
@@ -874,8 +871,6 @@ const dockDot = {
   borderRadius: '50%',
   background: '#6366f1'
 }
-
-const dockUnused = {}
 
 const iconButton = {
   border: 'none',
