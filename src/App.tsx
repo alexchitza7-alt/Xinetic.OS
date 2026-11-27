@@ -76,7 +76,204 @@ const buttonStyle = {
   color: '#34345a',
   fontWeight: 600
 } as const
+function XineticArcade() {
+  const [game, setGame] = useState('home')
+  const [score, setScore] = useState(0)
+  const [best, setBest] = useState(0)
+  const [target, setTarget] = useState(0)
+  const [guess, setGuess] = useState('')
+  const [message, setMessage] = useState('')
+  const [cards, setCards] = useState<number[]>([])
+  const [flipped, setFlipped] = useState<number[]>([])
+  const [matched, setMatched] = useState<number[]>([])
 
+  const startMemory = () => {
+    const deck = [1, 2, 3, 4, 1, 2, 3, 4]
+      .sort(() => Math.random() - 0.5)
+    setCards(deck)
+    setFlipped([])
+    setMatched([])
+    setScore(0)
+    setGame('memory')
+  }
+
+  const flipCard = (index: number) => {
+    if (flipped.length === 2 || flipped.includes(index) || matched.includes(index)) return
+
+    const next = [...flipped, index]
+    setFlipped(next)
+
+    if (next.length === 2) {
+      if (cards[next[0]] === cards[next[1]]) {
+        const newMatched = [...matched, ...next]
+        setMatched(newMatched)
+        setScore(newMatched.length / 2)
+        if (newMatched.length === cards.length) {
+          setMessage('You won!')
+        }
+        setFlipped([])
+      } else {
+        setTimeout(() => setFlipped([]), 700)
+      }
+    }
+  }
+
+  const startGuess = () => {
+    setTarget(Math.floor(Math.random() * 10) + 1)
+    setGuess('')
+    setMessage('Guess a number from 1 to 10!')
+    setGame('guess')
+  }
+
+  const checkGuess = () => {
+    if (Number(guess) === target) {
+      setMessage('Correct! You won!')
+      setScore(score + 1)
+      setBest(Math.max(best, score + 1))
+    } else {
+      setMessage(Number(guess) > target ? 'Too high! Try again.' : 'Too low! Try again.')
+    }
+  }
+
+  const games = [
+    { id: 'memory', name: 'Memory Match', icon: '🧠', description: 'Find matching pairs' },
+    { id: 'guess', name: 'Number Challenge', icon: '🔢', description: 'Guess the hidden number' },
+    { id: 'breaker', name: 'Brick Breaker', icon: '🧱', description: 'Arcade challenge' },
+    { id: 'space', name: 'Space Shooter', icon: '🚀', description: 'Space arcade challenge' },
+  ]
+
+  const panelStyle = {
+    background: 'rgba(255,255,255,0.85)',
+    border: '1px solid rgba(120,130,160,0.2)',
+    borderRadius: 18,
+    padding: 20,
+    color: '#1e293b',
+  }
+
+  return (
+    <div style={{ padding: 22, color: 'inherit', minHeight: 400 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
+        <div>
+          <h1 style={{ fontSize: 28, fontWeight: 800, margin: 0 }}>🎮 Xinetic Arcade</h1>
+          <p style={{ opacity: 0.7 }}>Your games. Your scores. Your arcade.</p>
+        </div>
+        <div style={{ ...panelStyle, padding: 12 }}>
+          🏆 Best: {best}
+        </div>
+      </div>
+
+      {game === 'home' && (
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit,minmax(180px,1fr))', gap: 14 }}>
+          {games.map(item => (
+            <button
+              key={item.id}
+              onClick={() => {
+                setScore(0)
+                setMessage('')
+                if (item.id === 'memory') startMemory()
+                else if (item.id === 'guess') startGuess()
+                else setGame(item.id)
+              }}
+              style={{ ...panelStyle, cursor: 'pointer', textAlign: 'left', minHeight: 145 }}
+            >
+              <div style={{ fontSize: 34 }}>{item.icon}</div>
+              <h3 style={{ marginBottom: 6 }}>{item.name}</h3>
+              <p style={{ opacity: 0.65, margin: 0 }}>{item.description}</p>
+              <p style={{ color: '#6366f1', fontWeight: 700 }}>PLAY →</p>
+            </button>
+          ))}
+        </div>
+      )}
+
+      {game !== 'home' && (
+        <div style={{ ...panelStyle, maxWidth: 520, margin: 'auto', textAlign: 'center' }}>
+          <button onClick={() => setGame('home')} style={{ float: 'left', cursor: 'pointer' }}>
+            ← Arcade
+          </button>
+          <div style={{ clear: 'both', paddingTop: 15 }} />
+
+          {game === 'memory' && (
+            <>
+              <h2>🧠 Memory Match</h2>
+              <p>Find all four matching pairs!</p>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 10 }}>
+                {cards.map((card, index) => (
+                  <button
+                    key={index}
+                    onClick={() => flipCard(index)}
+                    style={{
+                      height: 65,
+                      borderRadius: 12,
+                      border: 'none',
+                      cursor: 'pointer',
+                      fontSize: 25,
+                      background: matched.includes(index) ? '#bbf7d0' : '#e0e7ff',
+                    }}
+                  >
+                    {flipped.includes(index) || matched.includes(index) ? ['⭐', '🚀', '🎮', '💎'][card - 1] : '?'}
+                  </button>
+                ))}
+              </div>
+              <h3>Pairs: {score}/4</h3>
+              {matched.length === cards.length && <h3>🏆 You won!</h3>}
+            </>
+          )}
+
+          {game === 'guess' && (
+            <>
+              <h2>🔢 Number Challenge</h2>
+              <p>{message}</p>
+              <input
+                type="number"
+                min="1"
+                max="10"
+                value={guess}
+                onChange={e => setGuess(e.target.value)}
+                style={{ padding: 12, borderRadius: 10, width: 100 }}
+              />
+              <button onClick={checkGuess} style={{ padding: 12, marginLeft: 8, borderRadius: 10 }}>
+                Guess
+              </button>
+              <p>Score: {score}</p>
+              <button onClick={startGuess}>New round</button>
+            </>
+          )}
+
+          {game === 'breaker' && (
+            <>
+              <h2>🧱 Brick Breaker</h2>
+              <p>Tap the paddle to break bricks and earn points!</p>
+              <div style={{ fontSize: 45 }}>🧱 🧱 🧱</div>
+              <div style={{ fontSize: 35 }}>⚽</div>
+              <button onClick={() => {
+                setScore(score + 1)
+                setBest(Math.max(best, score + 1))
+              }} style={{ padding: 14, borderRadius: 12 }}>
+                Bounce the ball!
+              </button>
+              <h3>Score: {score}</h3>
+            </>
+          )}
+
+          {game === 'space' && (
+            <>
+              <h2>🚀 Space Shooter</h2>
+              <p>Tap the alien targets to score points!</p>
+              <div style={{ fontSize: 65, padding: 20 }}>👾</div>
+              <button onClick={() => {
+                setScore(score + 1)
+                setBest(Math.max(best, score + 1))
+              }} style={{ padding: 14, borderRadius: 12 }}>
+                🚀 Fire!
+              </button>
+              <h3>Score: {score}</h3>
+            </>
+          )}
+        </div>
+      )}
+    </div>
+  )
+}
 export default function App() {
   const [installed, setInstalled] = useState<AppId[]>(() => {
     try {
@@ -477,34 +674,10 @@ export default function App() {
           </div>
         )
 
-      case 'games':
-        return (
-          <div style={{ textAlign: 'center' }}>
-            <h2>Number Guessing Game</h2>
-            <p>{gameMessage}</p>
-            <input
-              type="number"
-              min="1"
-              max="10"
-              value={gameGuess}
-              onChange={e => setGameGuess(e.target.value)}
-              style={{ ...textInputStyle, maxWidth: 100 }}
-            />
-            <button style={buttonStyle} onClick={() => {
-              const guess = Number(gameGuess)
-              if (guess === gameNumber) setGameMessage('Correct! You got it! 🎉')
-              else setGameMessage(guess < gameNumber ? 'Too low! Try again.' : 'Too high! Try again.')
-            }}>Guess</button>
-            <button style={{ ...buttonStyle, marginLeft: 8 }} onClick={() => {
-              setGameNumber(Math.floor(Math.random() * 10) + 1)
-              setGameGuess('')
-              setGameMessage('New game! Guess a number from 1 to 10.')
-            }}>New game</button>
-          </div>
-        )
-    }
+       case 'games':
+  return <XineticArcade />
   }
-
+}
   const panel = dark ? '#202338' : 'rgba(255,255,255,0.94)'
   const textColor = dark ? '#f4f4ff' : '#252541'
   const muted = { color: dark ? '#b9bbd1' : '#77778c', fontSize: 12 }
