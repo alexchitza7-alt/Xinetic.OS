@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import type { ComponentType } from 'react'
 import {
   Monitor, Folder, Settings, Terminal, Calculator, FileText,
   Wifi, Battery, Volume2, Bell, X, Minus, Maximize2,
